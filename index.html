@@ -16,80 +16,80 @@
 
 <div id="game">
 
-<div id="comancheArea">
-  <h1 id="scoreNumber" class="scoreFont">0</h1>
-  <button id="comancheButton" onclick="comancheClicked()">
-    <img id="comanche-baby" src="Click the Comanche Baby.png" alt="Baby">
-    <img id="comanche-boy" src="Click the Comanche Boy.png" alt="Boy" class="hidden">
-    <img id="comanche-teen" src="Click the Comanche Teen.png" alt="Teen" class="hidden">
+  <div id="comancheArea">
+    <h1 id="scoreNumber" class="scoreFont">0</h1>
+    <button id="comancheButton" onclick="comancheClicked()">
+      <img id="comanche-baby" src="Click the Comanche Baby.png" alt="Baby">
+      <img id="comanche-boy" src="Click the Comanche Boy.png" alt="Boy" class="hidden">
+      <img id="comanche-teen" src="Click the Comanche Teen.png" alt="Teen" class="hidden">
+    </button>
+  </div>
+
+  <div id="birthPopUp" class="popUpInCenter">
+    <button onclick="closeFirstPopup()">❌</button>
+    <h2>YOU ARE BORN</h2>
+    <p>You are born to <span id="fatherInPopUp"></span> and <span id="motherInPopUp"></span>. You are a Comanche. Your first milestone is 50 clicks!</p>
+  </div>
+
+  <div id="scoreCheckOnePopUp" class="popUpInCenter hidden">
+    <button onclick="closeCheckOnePopUp()">❌</button>
+    <h2>MILESTONE #1</h2>
+    <p>You are getting hungry from all that clicking! Click the Apples to Eat Them!</p>
+  </div>
+
+  <button id="apple" class="hidden" onclick="appleClicked()">
+    <h1>🍎</h1>
   </button>
-</div>
 
-<div id="birthPopUp" class="popUpInCenter">
-  <button onclick="closeFirstPopup()">❌</button>
-  <h2>YOU ARE BORN</h2>
-  <p>You are born to <span id="fatherInPopUp"></span> and <span id="motherInPopUp"></span>. You are a Comanche. Your first milestone is 50 clicks!</p>
-</div>
+  <div id="scoreCheckOneSuccessPopUp" class="popUpInCenter hidden">
+    <button onclick="closeCheckOnePopUpSuccess()">❌</button>
+    <h2>CONGRATULATIONS!</h2>
+    <p>You have successfully completed Milestone #1! You are now worthy to become nomadic and roam the Texas grasslands with your tribe. You will now get 5 clicks for every one click! You are now 7 years old. Your second milestone is 500 clicks.</p>
+  </div>
 
-<div id="scoreCheckOnePopUp" class="popUpInCenter hidden">
-  <button onclick="closeCheckOnePopUp()">❌</button>
-  <h2>MILESTONE #1</h2>
-  <p>You are getting hungry from all that clicking! Click the Apples to Eat Them!</p>
-</div>
+  <div id="scoreCheckTwoPopUp" class="popUpInCenter hidden">
+    <button onclick="closeCheckTwoPopUp()">❌</button>
+    <h2>MILESTONE #2</h2>
+    <p>You have started your horse training as a Comanche! The Comanche were powerful horse riders, which is one thing that made them so vicious. Click SPACE to jump over the obstacles!</p>
+  </div>
 
-<button id="apple" class="hidden" onclick="appleClicked()">
-  <h1>🍎</h1>
-</button>
+  <img id="horseRunning" class="horseGuy hidden" src="horseRunning.png" alt="Horse running">
+  <img id="horseJumping" class="horseGuy hidden" src="horseJumping.png" alt="Horse jumping">
 
-<div id="scoreCheckOneSuccessPopUp" class="popUpInCenter hidden">
-  <button onclick="closeCheckOnePopUpSuccess()">❌</button>
-  <h2>CONGRATULATIONS!</h2>
-  <p>You have successfully completed Milestone #1! You are now worthy to become nomadic and roam the Texas grasslands with your tribe. You will now get 5 clicks for every one click! You are now 7 years old. Your second milestone is 500 clicks.</p>
-</div>
+  <div id="scoreCheckTwoFailRetry" class="popUpInCenter hidden">
+    <button onclick="resetHorseGame()">RETRY</button>
+    <h2>Aww, Shucks!</h2>
+    <p>SO CLOSE! Click the button in the top left to try again!</p>
+  </div>
 
-<div id="scoreCheckTwoPopUp" class="popUpInCenter hidden">
-  <button onclick="closeCheckTwoPopUp()">❌</button>
-  <h2>MILESTONE #2</h2>
-  <p>You have started your horse training as a Comanche! The Comanche were powerful horse riders, which is one thing that made them so vicious. Click SPACE to jump over the obstacles!</p>
-</div>
+  <div id="scoreCheckTwoSuccessPopUp" class="popUpInCenter hidden">
+    <button onclick="closeCheckTwoPopUpSuccess()">❌</button>
+    <h2>CONGRATULATIONS!</h2>
+    <p>You have successfully completed Milestone #2! You are now worthy to hunt. You will now get 10 clicks for every one click! You are now 16 years old. Your third and final milestone is 1000 clicks.</p>
+  </div>
 
-<img id="horseRunning" class="horseGuy hidden" src="horseRunning.png" alt="Horse running">
-<img id="horseJumping" class="horseGuy hidden" src="horseJumping.png" alt="Horse jumping">
+  <div id="scoreCheckThreePopUp" class="popUpInCenter hidden">
+    <button onclick="closeCheckThreePopUp()">❌</button>
+    <h2>THIRD MILESTONE-FINAL</h2>
+    <p>Congratulations on making it this far! For your final milestone, the village people will vote on whether or not you are a worthy Comanche. Answer wisely! Read the question and click your best answer. You've got this!</p>
+  </div>
 
-<div id="scoreCheckTwoFailRetry" class="popUpInCenter hidden">
-  <button onclick="resetHorseGame()">RETRY</button>
-  <h2>Aww, Shucks!</h2>
-  <p>SO CLOSE! Click the button in the top left to try again!</p>
-</div>
+  <button id="nextButton" class="questionButton middle hidden" onclick="nextButton()">NEXT</button>
 
-<div id="scoreCheckTwoSuccessPopUp" class="popUpInCenter hidden">
-  <button onclick="closeCheckTwoPopUpSuccess()">❌</button>
-  <h2>CONGRATULATIONS!</h2>
-  <p>You have successfully completed Milestone #2! You are now worthy to hunt. You will now get 10 clicks for every one click! You are now 16 years old. Your third and final milestone is 1000 clicks.</p>
-</div>
+  <button class="questionButton left hidden" id="questionOneA" onclick="firstQuestionA()">Bison, of course!</button>
+  <button class="questionButton right hidden" id="questionOneB" onclick="firstQuestionA()">I'm not picky.</button>
 
-<div id="scoreCheckThreePopUp" class="popUpInCenter hidden">
-  <button onclick="closeCheckThreePopUp()">❌</button>
-  <h2>THIRD MILESTONE-FINAL</h2>
-  <p>Congratulations on making it this far! For your final milestone, the village people will vote on whether or not you are a worthy Comanche. Answer wisely! Read the question and click your best answer. You've got this!</p>
-</div>
+  <button class="questionButton left hidden" id="questionTwoA" onclick="secondQuestionA()">I don't know.</button>
+  <button class="questionButton right hidden" id="questionTwoB" onclick="secondQuestionB()">Horse</button>
 
-<button id="nextButton" class="questionButton middle hidden" onclick="nextButton()">NEXT</button>
+  <button class="questionButton left hidden" id="questionThreeA" onclick="thirdQuestionA()">True</button>
+  <button class="questionButton right hidden" id="questionThreeB" onclick="thirdQuestionB()">False</button>
 
-<button class="questionButton left hidden" id="questionOneA" onclick="firstQuestionA()">Bison, of course!</button>
-<button class="questionButton right hidden" id="questionOneB" onclick="firstQuestionA()">I'm not picky.</button>
+  <button class="questionButton left hidden" id="questionFourA" onclick="fourthQuestionA()">True</button>
+  <button class="questionButton right hidden" id="questionFourB" onclick="fourthQuestionB()">False</button>
 
-<button class="questionButton left hidden" id="questionTwoA" onclick="secondQuestionA()">I don't know.</button>
-<button class="questionButton right hidden" id="questionTwoB" onclick="secondQuestionB()">Horse</button>
-
-<button class="questionButton left hidden" id="questionThreeA" onclick="thirdQuestionA()">True</button>
-<button class="questionButton right hidden" id="questionThreeB" onclick="thirdQuestionB()">False</button>
-
-<button class="questionButton left hidden" id="questionFourA" onclick="fourthQuestionA()">True</button>
-<button class="questionButton right hidden" id="questionFourB" onclick="fourthQuestionB()">False</button>
-
-<button class="questionButton left hidden" id="questionFiveA" onclick="fifthQuestionA()">Yes!</button>
-<button class="questionButton right hidden" id="questionFiveB" onclick="fifthQuestionB()">No</button>
+  <button class="questionButton left hidden" id="questionFiveA" onclick="fifthQuestionA()">Yes!</button>
+  <button class="questionButton right hidden" id="questionFiveB" onclick="fifthQuestionB()">No</button>
 
 </div>
 
@@ -326,7 +326,7 @@ function horseJump() {
 
 function horseJumpMotion(direction, callback) {
   const horse = document.getElementById("horseJumping");
-  const targetY = direction === "up" ? -125 : 0;
+  const targetY = direction === "up" ? -142.5 : 0;
   const step = direction === "up" ? -2 : 2;
   const interval = setInterval(function () {
     if ((direction === "up" && y <= targetY) || (direction === "down" && y >= targetY)) {
@@ -344,7 +344,7 @@ function horseJumpMotion(direction, callback) {
 function scheduleSpawn() {
   if (!spawningRock || gameOver) return;
   if (spawnTimeoutId !== null) return;
-  const delay = 2000 + Math.random() * 2000;
+  const delay = 2000 + Math.random() * 3500;
   spawnTimeoutId = setTimeout(() => {
     spawnTimeoutId = null;
     if (!spawningRock || gameOver) return;
@@ -406,36 +406,34 @@ function spawnRock() {
           horseJumpedCount += 1;
 
           if (horseJumpedCount >= 10) {
-              clearInterval(interval);
-              rock.remove();
+            clearInterval(interval);
+            rock.remove();
 
-              gameOver = true;             // ← stop all active rock loops immediately
-              spawningRock = false;
+            gameOver = true;
+            spawningRock = false;
 
-              if (spawnTimeoutId !== null) {
-                clearTimeout(spawnTimeoutId);
-                spawnTimeoutId = null;
-              }
+            if (spawnTimeoutId !== null) {
+              clearTimeout(spawnTimeoutId);
+              spawnTimeoutId = null;
+            }
 
-              const runEl = document.getElementById("horseRunning");
-              const jumpEl = document.getElementById("horseJumping");
-              runEl.classList.add("hidden");
-              jumpEl.classList.add("hidden");
-              runEl.style.display = "none";
-              jumpEl.style.display = "none";
+            const runEl = document.getElementById("horseRunning");
+            const jumpEl = document.getElementById("horseJumping");
+            runEl.classList.add("hidden");
+            jumpEl.classList.add("hidden");
+            runEl.style.display = "none";
+            jumpEl.style.display = "none";
 
-              document.querySelectorAll(".rock").forEach(rk => rk.remove());
-              document.getElementById('scoreCheckTwoFailRetry').classList.add('hidden'); // ← ensure fail popup stays hidden
+            document.querySelectorAll(".rock").forEach(rk => rk.remove());
+            document.getElementById('scoreCheckTwoFailRetry').classList.add('hidden');
 
-              document.getElementById("scoreCheckTwoSuccessPopUp").classList.remove("hidden");
-              document.getElementById("comanche-teen").classList.remove("hidden");
-              document.body.style.backgroundImage = "url('BG2.png')";
-              scorePerClick = 10;
-              yaySFX();
-              scoreDisplay("show");
+            document.getElementById("scoreCheckTwoSuccessPopUp").classList.remove("hidden");
+            document.getElementById("comanche-teen").classList.remove("hidden");
+            document.body.style.backgroundImage = "url('BG2.png')";
+            scorePerClick = 10;
+            yaySFX();
+            scoreDisplay("show");
           }
-
-
         }
       }
     }
@@ -459,22 +457,22 @@ function checkCollision(rockEl) {
 
 function handleCollision() {
   if (gameOver || !horseMiniGame) return;
-  gameOver = true
-  spawningRock = false
-  horseMiniGame = false
+  gameOver = true;
+  spawningRock = false;
+  horseMiniGame = false;
 
-  const running = document.getElementById('horseRunning')
-  const jumping = document.getElementById('horseJumping')
-  running.classList.add('hidden')
-  jumping.classList.add('hidden')
+  const running = document.getElementById('horseRunning');
+  const jumping = document.getElementById('horseJumping');
+  running.classList.add('hidden');
+  jumping.classList.add('hidden');
 
-  document.querySelectorAll('.rock').forEach(r => r.remove())
+  document.querySelectorAll('.rock').forEach(r => r.remove());
   if (spawnTimeoutId !== null) {
-    clearTimeout(spawnTimeoutId)
-    spawnTimeoutId = null
+    clearTimeout(spawnTimeoutId);
+    spawnTimeoutId = null;
   }
-  document.getElementById('scoreCheckTwoFailRetry').classList.remove('hidden')
-  horseJumpedCount = 0
+  document.getElementById('scoreCheckTwoFailRetry').classList.remove('hidden');
+  horseJumpedCount = 0;
 }
 
 function resetHorseGame() {
@@ -494,27 +492,27 @@ function resetHorseGame() {
 }
 
 function closeCheckThreePopUp(){
-  document.getElementById('scoreCheckThreePopUp').classList.add('hidden')
+  document.getElementById('scoreCheckThreePopUp').classList.add('hidden');
   minigameMusicStart();
   firstQuestionPrep();
 }
 
 function firstQuestionPrep(){
-  scoreDisplay('show')
+  scoreDisplay('show');
   questionText.classList.remove('scoreFont');
   firstQuestion();
 }
 
 function firstQuestion(){
   question = 1;
-  questionText.textContent = "QUESTION 1: What's your favorite food?"
+  questionText.textContent = "QUESTION 1: What's your favorite food?";
   document.getElementById('questionOneA').classList.remove('hidden');
   document.getElementById('questionOneB').classList.remove('hidden');
 }
 
 function firstQuestionA(){
   hideFirstButtons();
-  questionText.textContent = "Everyone appreciates your taste."
+  questionText.textContent = "Everyone appreciates your taste.";
   showNext();
 }
 
@@ -524,21 +522,21 @@ function hideFirstButtons(){
 }
 
 function secondQuestion(){
-  questionText.textContent = "QUESTION 2: What animal were the Comanche famous masters of riding?"
+  questionText.textContent = "QUESTION 2: What animal were the Comanche famous masters of riding?";
   question = 2;
   document.getElementById('questionTwoA').classList.remove('hidden');
-  document.getElementById('questionTwoB').classList.remove('hidden');  
+  document.getElementById('questionTwoB').classList.remove('hidden');
 }
 
 function secondQuestionA(){
   hideSecondButtons();
-  questionText.textContent = "Everyone respects your honesty, but you should know that it's horse by now."
+  questionText.textContent = "Everyone respects your honesty, but you should know that it's horse by now.";
   showNext();
 }
 
 function secondQuestionB(){
   hideSecondButtons();
-  questionText.textContent = "You would know-You tamed one, remember?"
+  questionText.textContent = "You would know-You tamed one, remember?";
   showNext();
 }
 
@@ -548,7 +546,7 @@ function hideSecondButtons(){
 }
 
 function thirdQuestion(){
-  questionText.textContent = "QUESTION 3: True or False: The Comanche were nomadic"
+  questionText.textContent = "QUESTION 3: True or False: The Comanche were nomadic";
   question = 3;
   document.getElementById('questionThreeA').classList.remove('hidden');
   document.getElementById('questionThreeB').classList.remove('hidden');
@@ -556,13 +554,13 @@ function thirdQuestion(){
 
 function thirdQuestionA(){
   hideThirdButtons();
-  questionText.textContent = "Of course! Remember the background changing?"
+  questionText.textContent = "Of course! Remember the background changing?";
   showNext();
 }
 
 function thirdQuestionB(){
   hideThirdButtons();
-  questionText.textContent = "You apparently forgot about the background changing."
+  questionText.textContent = "You apparently forgot about the background changing.";
   showNext();
 }
 
@@ -572,7 +570,7 @@ function hideThirdButtons(){
 }
 
 function fourthQuestion(){
-  questionText.textContent = "QUESTION 4: True or False: The Comanche roamed the Texas Coastline "
+  questionText.textContent = "QUESTION 4: True or False: The Comanche roamed the Texas Coastline ";
   question = 4;
   document.getElementById('questionFourA').classList.remove('hidden');
   document.getElementById('questionFourB').classList.remove('hidden');
@@ -580,13 +578,13 @@ function fourthQuestion(){
 
 function fourthQuestionA(){
   hideFourthButtons();
-  questionText.textContent = "You clearly didn't read your message of congratulations on Milestone #1. They roamed the Texas Grasslands, silly!"
+  questionText.textContent = "You clearly didn't read your message of congratulations on Milestone #1. They roamed the Texas Grasslands, silly!";
   showNext();
 }
 
 function fourthQuestionB(){
   hideFourthButtons();
-  questionText.textContent = "Yep, we roamed the Grasslands-You sure did your reading!"
+  questionText.textContent = "Yep, we roamed the Grasslands-You sure did your reading!";
   showNext();
 }
 
@@ -596,21 +594,22 @@ function hideFourthButtons(){
 }
 
 function fifthQuestion(){
-  questionText.textContent = "QUESTION 5: True or False: You had fun and learned something today!"
+  questionText.textContent = "QUESTION 5: True or False: You had fun and learned something today!";
   question = 5;
   document.getElementById('questionFiveA').classList.remove('hidden');
   document.getElementById('questionFiveB').classList.remove('hidden');
+  document.getElementById('nextButton').textContent = "BEAT GAME!"
 }
 
 function fifthQuestionA(){
   hideFifthButtons();
-  questionText.textContent = "Glad you liked it-Thanks for playing!"
+  questionText.textContent = "Glad you liked it-Thanks for playing!";
   showNext();
 }
 
 function fifthQuestionB(){
   hideFifthButtons();
-  questionText.textContent = "That's a shame-Thank you for playing, though!"
+  questionText.textContent = "That's a shame-Thank you for playing, though!";
   showNext();
 }
 
@@ -626,25 +625,20 @@ function endSequence() {
   spawningRock = false;
   if (spawnTimeoutId !== null) { clearTimeout(spawnTimeoutId); spawnTimeoutId = null; }
   document.querySelectorAll(".rock").forEach(r => r.remove());
-
   const runEl = document.getElementById("horseRunning");
   const jumpEl = document.getElementById("horseJumping");
   if (runEl) runEl.classList.add("hidden");
   if (jumpEl) jumpEl.classList.add("hidden");
-
   const gameRoot = document.getElementById("game");
   if (gameRoot) gameRoot.classList.add("hidden");
-
   document.body.style.backgroundImage = "none";
   document.body.style.background = "#000";
   document.body.style.color = "#000";
-
   stopAllAudio();
   const end = document.getElementById("endSFX");
   if (end) { end.currentTime = 0; end.loop = true; end.play(); }
 }
 
-// replace your current nextButton() with this:
 function nextButton(){
   if (question == 1){
     secondQuestion();
@@ -655,7 +649,6 @@ function nextButton(){
   } else if (question == 4){
     fifthQuestion();
   } else {
-    alert('You have finished Click the Comanche! Close the tab or reload to play again, or stick around, press OK, and jam out to some tunes!');
     endSequence();
   }
   document.getElementById('nextButton').classList.add('hidden');
@@ -694,7 +687,7 @@ function scoreCheck(){
     document.getElementById('scoreCheckThreePopUp').classList.remove('hidden');
     document.getElementById('comanche-teen').classList.add('hidden');
     scoreCheckVar = 1000;
-    scoreDisplay('hide')
+    scoreDisplay('hide');
     inMinigame = true;
     changeBG = false;
     document.body.style.backgroundImage = "url('OldBG.png')";
