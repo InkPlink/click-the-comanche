@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <title>Click the Comanche!</title>
+  <link rel="stylesheet" href="click-the-comanche.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<audio id="mainSong" src="Click the Comanche Song.mp3"></audio>
+<audio id="cryingBabySFX" src="Baby Crying SFX.mp3"></audio>
+<audio id="minigameMusic" src="Minigame Music.mp3"></audio>
+<audio id="yaySFX" src="Yay.mp3"></audio>
+<audio id="endSFX" src="End Song.mp3" loop></audio>
+
+<div id="game">
+
+<div id="comancheArea">
+  <h1 id="scoreNumber" class="scoreFont">0</h1>
+  <button id="comancheButton" onclick="comancheClicked()">
+    <img id="comanche-baby" src="Click the Comanche Baby.png" alt="Baby">
+    <img id="comanche-boy" src="Click the Comanche Boy.png" alt="Boy" class="hidden">
+    <img id="comanche-teen" src="Click the Comanche Teen.png" alt="Teen" class="hidden">
+  </button>
+</div>
+
+<div id="birthPopUp" class="popUpInCenter">
+  <button onclick="closeFirstPopup()">❌</button>
+  <h2>YOU ARE BORN</h2>
+  <p>You are born to <span id="fatherInPopUp"></span> and <span id="motherInPopUp"></span>. You are a Comanche. Your first milestone is 50 clicks!</p>
+</div>
+
+<div id="scoreCheckOnePopUp" class="popUpInCenter hidden">
+  <button onclick="closeCheckOnePopUp()">❌</button>
+  <h2>MILESTONE #1</h2>
+  <p>You are getting hungry from all that clicking! Click the Apples to Eat Them!</p>
+</div>
+
+<button id="apple" class="hidden" onclick="appleClicked()">
+  <h1>🍎</h1>
+</button>
+
+<div id="scoreCheckOneSuccessPopUp" class="popUpInCenter hidden">
+  <button onclick="closeCheckOnePopUpSuccess()">❌</button>
+  <h2>CONGRATULATIONS!</h2>
+  <p>You have successfully completed Milestone #1! You are now worthy to become nomadic and roam the Texas grasslands with your tribe. You will now get 5 clicks for every one click! You are now 7 years old. Your second milestone is 500 clicks.</p>
+</div>
+
+<div id="scoreCheckTwoPopUp" class="popUpInCenter hidden">
+  <button onclick="closeCheckTwoPopUp()">❌</button>
+  <h2>MILESTONE #2</h2>
+  <p>You have started your horse training as a Comanche! The Comanche were powerful horse riders, which is one thing that made them so vicious. Click SPACE to jump over the obstacles!</p>
+</div>
+
+<img id="horseRunning" class="horseGuy hidden" src="horseRunning.png" alt="Horse running">
+<img id="horseJumping" class="horseGuy hidden" src="horseJumping.png" alt="Horse jumping">
+
+<div id="scoreCheckTwoFailRetry" class="popUpInCenter hidden">
+  <button onclick="resetHorseGame()">RETRY</button>
+  <h2>Aww, Shucks!</h2>
+  <p>SO CLOSE! Click the button in the top left to try again!</p>
+</div>
+
+<div id="scoreCheckTwoSuccessPopUp" class="popUpInCenter hidden">
+  <button onclick="closeCheckTwoPopUpSuccess()">❌</button>
+  <h2>CONGRATULATIONS!</h2>
+  <p>You have successfully completed Milestone #2! You are now worthy to hunt. You will now get 10 clicks for every one click! You are now 16 years old. Your third and final milestone is 1000 clicks.</p>
+</div>
+
+<div id="scoreCheckThreePopUp" class="popUpInCenter hidden">
+  <button onclick="closeCheckThreePopUp()">❌</button>
+  <h2>THIRD MILESTONE-FINAL</h2>
+  <p>Congratulations on making it this far! For your final milestone, the village people will vote on whether or not you are a worthy Comanche. Answer wisely! Read the question and click your best answer. You've got this!</p>
+</div>
+
+<button id="nextButton" class="questionButton middle hidden" onclick="nextButton()">NEXT</button>
+
+<button class="questionButton left hidden" id="questionOneA" onclick="firstQuestionA()">Bison, of course!</button>
+<button class="questionButton right hidden" id="questionOneB" onclick="firstQuestionA()">I'm not picky.</button>
+
+<button class="questionButton left hidden" id="questionTwoA" onclick="secondQuestionA()">I don't know.</button>
+<button class="questionButton right hidden" id="questionTwoB" onclick="secondQuestionB()">Horse</button>
+
+<button class="questionButton left hidden" id="questionThreeA" onclick="thirdQuestionA()">True</button>
+<button class="questionButton right hidden" id="questionThreeB" onclick="thirdQuestionB()">False</button>
+
+<button class="questionButton left hidden" id="questionFourA" onclick="fourthQuestionA()">True</button>
+<button class="questionButton right hidden" id="questionFourB" onclick="fourthQuestionB()">False</button>
+
+<button class="questionButton left hidden" id="questionFiveA" onclick="fifthQuestionA()">Yes!</button>
+<button class="questionButton right hidden" id="questionFiveB" onclick="fifthQuestionB()">No</button>
+
+</div>
+
+<script>
+let score = 0;
+let scorePerClick = 1;
+let comancheLevel = "baby";
+let scoreCheckVar = 50;
+let inMinigame = true;
+let randomX;
+let randomY;
+const questionText = document.getElementById('scoreNumber');
+const SAFE_MARGIN = 8;
+let musicStarted = false;
+let father;
+let mother;
+let musicWorking = true;
+let appleCounter = 0;
+let appleHideTimeout;
+let horseMiniGame = true;
+let gameOver = false;
+let y = 0;
+let spawningRock = true;
+let horseJumpedCount = 0;
+let spawnTimeoutId = null;
+let backgroundStage = 1;
+let changeBG = false;
+let question = null;
+
+function comancheClicked() {
+  if (inMinigame == false){
+    popComanche();
+    score += scorePerClick;
+    document.getElementById('scoreNumber').textContent = `${score}`;
+    scoreCheck();
+  }
+}
+
+function tryMusic() {
+  if (!musicStarted) {
+    try {
+      const song = document.getElementById("mainSong");
+      song.currentTime = 0;
+      song.volume = 1;
+      song.play();
+      musicStarted = true;
+      song.loop = true;
+    } catch (e) {
+      musicStarted = true;
+      musicWorking = false;
+    }
+  }
+}
+
+function tryBabySFX(){
+  try {
+    const babyWail = document.getElementById("cryingBabySFX");
+    babyWail.currentTime = 0;
+    babyWail.volume = 1;
+    babyWail.play();
+    babyWail.loop = true;
+  } catch (e) {
+    musicWorking = false;
+  }
+}
+
+function decideParents() {
+  const fathers = ["Makhpiya-Luta","Hin-mah-too-yah-lat-kekt","Tashunca-uitco","Tatanka Iyotaka","Hehaka Sapa"];
+  const mothers = ["Diane Humetewa","Wilma Mankiller","Susan La Flesche Picotte","Maria Tallchief","Lyda Conley"];
+  father = fathers[Math.floor(Math.random() * fathers.length)];
+  mother = mothers[Math.floor(Math.random() * mothers.length)];
+  document.getElementById('fatherInPopUp').textContent = father;
+  document.getElementById('motherInPopUp').textContent = mother;
+}
+decideParents();
+
+function closeFirstPopup() {
+  const pop = document.getElementById('birthPopUp');
+  pop.classList.add('hidden');
+  inMinigame = false;
+  tryMusic();
+  tryBabySFX();
+}
+
+function stopCrying(){
+  const babyWail = document.getElementById("cryingBabySFX");
+  babyWail.pause();
+  babyWail.loop = false;
+}
+
+function stopMusicMain(){
+  const song = document.getElementById("mainSong");
+  song.pause();
+  song.loop = false;
+  musicStarted = false;
+}
+
+function minigameMusicStart(){
+  if (musicWorking){
+    const mgm = document.getElementById("minigameMusic");
+    mgm.currentTime = 0;
+    mgm.volume = 1;
+    mgm.play();
+    mgm.loop = true;
+  }
+}
+
+function popComanche() {
+  const img = document.getElementById('comancheButton');
+  img.animate([{transform:'scale(1)'},{transform:'scale(1.05)'},{transform:'scale(1)'}],{duration:160,easing:'ease-out'});
+}
+
+function scoreDisplay(hideOrShow){
+  if (hideOrShow == "hide"){
+    document.getElementById('scoreNumber').classList.add('hidden');
+  } else {
+    document.getElementById('scoreNumber').classList.remove('hidden');
+  }
+}
+
+function closeCheckOnePopUp(){
+  const pop = document.getElementById('scoreCheckOnePopUp');
+  pop.classList.add('hidden');
+  minigameMusicStart();
+  appleMiniGame();
+}
+
+function appleMiniGame(){
+  randomXYChanger();
+  showApple();
+}
+
+function randomXYChanger() {
+  const apple = document.getElementById('apple');
+  const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const aw = apple.offsetWidth || 64;
+  const ah = apple.offsetHeight || 64;
+  const maxX = Math.max(SAFE_MARGIN, vw - aw - SAFE_MARGIN);
+  const maxY = Math.max(SAFE_MARGIN, vh - ah - SAFE_MARGIN);
+  randomX = Math.floor(SAFE_MARGIN + Math.random() * maxX);
+  randomY = Math.floor(SAFE_MARGIN + Math.random() * maxY);
+}
+
+function showApple(){
+  const box = document.getElementById('apple');
+  box.classList.remove('hidden');
+  randomXYChanger();
+  box.style.left = randomX + "px";
+  box.style.top  = randomY + "px";
+  appleHideTimeout = setTimeout(function() {
+    popApple();
+    setTimeout(() => popApple(), 150);
+    setTimeout(() => popApple(), 300);
+    setTimeout(() => popApple(), 450);
+    setTimeout(() => popApple(), 600);
+    appleHideTimeout = setTimeout(function() {
+      box.classList.add('hidden');
+      appleMiniGame();
+    }, 1000);
+  }, 1500);
+}
+
+function popApple(){
+  const apple = document.getElementById('apple');
+  apple.animate([{transform:'scale(1)'},{transform:'scale(1.15)'},{transform:'scale(1)'}],{duration:75,easing:'ease-out'});
+}
+
+function closeCheckOnePopUpSuccess(){
+  document.getElementById('scoreCheckOneSuccessPopUp').classList.add('hidden');
+  inMinigame = false;
+  changeBG = true;
+  tryMusic();
+  backgroundChanger();
+}
+
+function appleClicked(){
+  appleCounter += 1;
+  clearTimeout(appleHideTimeout);
+  const apple = document.getElementById('apple');
+  apple.classList.add('hidden');
+  if (appleCounter < 10) {
+    appleMiniGame();
+  } else {
+    inMinigame = true;
+    scorePerClick = 5;
+    document.getElementById('scoreCheckOneSuccessPopUp').classList.remove('hidden');
+    scoreDisplay("show");
+    document.getElementById('comanche-boy').classList.remove('hidden');
+    yaySFX();
+  }
+}
+
+function yaySFX(){
+  if (musicWorking){
+    const mgm = document.getElementById("minigameMusic");
+    const yay = document.getElementById("yaySFX");
+    mgm.pause();
+    mgm.loop = false;
+    yay.currentTime = 0;
+    yay.volume = 1;
+    yay.play();
+  }
+}
+
+function closeCheckTwoPopUp(){
+  document.getElementById('scoreCheckTwoPopUp').classList.add('hidden');
+  document.getElementById('horseRunning').classList.remove('hidden');
+  minigameMusicStart();
+  scheduleSpawn();
+}
+
+document.addEventListener("keydown", function (e) {
+  if (horseMiniGame){
+    if (e.code === "Space") e.preventDefault();
+    if (!horseMiniGame || gameOver) return;
+    if (e.code === "Space") horseJump();
+  }
+});
+
+function horseJump() {
+  if (y !== 0) return;
+  const runImg = document.getElementById("horseRunning");
+  const jumpImg = document.getElementById("horseJumping");
+  runImg.classList.add("hidden");
+  jumpImg.classList.remove("hidden");
+  horseJumpMotion("up", function () {
+    horseJumpMotion("down", function () {
+      jumpImg.classList.add("hidden");
+      runImg.classList.remove("hidden");
+    });
+  });
+}
+
+function horseJumpMotion(direction, callback) {
+  const horse = document.getElementById("horseJumping");
+  const targetY = direction === "up" ? -125 : 0;
+  const step = direction === "up" ? -2 : 2;
+  const interval = setInterval(function () {
+    if ((direction === "up" && y <= targetY) || (direction === "down" && y >= targetY)) {
+      y = targetY;
+      horse.style.transform = `translateY(calc(-50% + ${y}px))`;
+      clearInterval(interval);
+      if (callback) callback();
+      return;
+    }
+    y += step;
+    horse.style.transform = `translateY(calc(-50% + ${y}px))`;
+  }, 10);
+}
+
+function scheduleSpawn() {
+  if (!spawningRock || gameOver) return;
+  if (spawnTimeoutId !== null) return;
+  const delay = 2000 + Math.random() * 2000;
+  spawnTimeoutId = setTimeout(() => {
+    spawnTimeoutId = null;
+    if (!spawningRock || gameOver) return;
+    spawnRock();
+    scheduleSpawn();
+  }, delay);
+}
+
+function spawnRock() {
+  if (!horseMiniGame) return;
+  const rock = document.createElement("h2");
+  rock.className = "rock";
+  rock.textContent = "🪨";
+  let x = window.innerWidth - 100;
+  rock.style.left = x + "px";
+  rock.style.transform = "translateY(-50%)";
+  document.body.appendChild(rock);
+  let scored = false;
+  const speed = 3;
+  const targetX = -120;
+
+  const interval = setInterval(function () {
+    if (gameOver) {
+      clearInterval(interval);
+      rock.remove();
+      return;
+    }
+    if (x <= targetX) {
+      clearInterval(interval);
+      rock.remove();
+      return;
+    }
+
+    x -= speed;
+    rock.style.left = x + "px";
+
+    if (checkCollision(rock)) {
+      clearInterval(interval);
+      rock.remove();
+      handleCollision();
+      return;
+    }
+
+    if (!scored) {
+      const horseRunning = document.getElementById("horseRunning");
+      const horseJumping = document.getElementById("horseJumping");
+      const horseEl = horseJumping.classList.contains("hidden") ? horseRunning : horseJumping;
+
+      const horseLeft = horseEl.getBoundingClientRect().left;
+      const rockRight = rock.getBoundingClientRect().right;
+
+      if (rockRight < (horseLeft - 20)) {
+        const h = horseEl.getBoundingClientRect();
+        const r = rock.getBoundingClientRect();
+        const verticalGap = h.bottom < r.top;
+
+        if (verticalGap) {
+          scored = true;
+          horseJumpedCount += 1;
+
+          if (horseJumpedCount >= 10) {
+              clearInterval(interval);
+              rock.remove();
+
+              gameOver = true;             // ← stop all active rock loops immediately
+              spawningRock = false;
+
+              if (spawnTimeoutId !== null) {
+                clearTimeout(spawnTimeoutId);
+                spawnTimeoutId = null;
+              }
+
+              const runEl = document.getElementById("horseRunning");
+              const jumpEl = document.getElementById("horseJumping");
+              runEl.classList.add("hidden");
+              jumpEl.classList.add("hidden");
+              runEl.style.display = "none";
+              jumpEl.style.display = "none";
+
+              document.querySelectorAll(".rock").forEach(rk => rk.remove());
+              document.getElementById('scoreCheckTwoFailRetry').classList.add('hidden'); // ← ensure fail popup stays hidden
+
+              document.getElementById("scoreCheckTwoSuccessPopUp").classList.remove("hidden");
+              document.getElementById("comanche-teen").classList.remove("hidden");
+              document.body.style.backgroundImage = "url('BG2.png')";
+              scorePerClick = 10;
+              yaySFX();
+              scoreDisplay("show");
+          }
+
+
+        }
+      }
+    }
+  }, 10);
+}
+
+function closeCheckTwoPopUpSuccess(){
+  document.getElementById('scoreCheckTwoSuccessPopUp').classList.add('hidden');
+  inMinigame = false;
+  tryMusic();
+}
+
+function checkCollision(rockEl) {
+  const horse = document.querySelector(".horseGuy:not(.hidden)");
+  if (!horse || !rockEl) return false;
+  const h = horse.getBoundingClientRect();
+  const r = rockEl.getBoundingClientRect();
+  const noOverlap = h.right < r.left || h.left > r.right || h.bottom < r.top || h.top > r.bottom;
+  return !noOverlap;
+}
+
+function handleCollision() {
+  if (gameOver || !horseMiniGame) return;
+  gameOver = true
+  spawningRock = false
+  horseMiniGame = false
+
+  const running = document.getElementById('horseRunning')
+  const jumping = document.getElementById('horseJumping')
+  running.classList.add('hidden')
+  jumping.classList.add('hidden')
+
+  document.querySelectorAll('.rock').forEach(r => r.remove())
+  if (spawnTimeoutId !== null) {
+    clearTimeout(spawnTimeoutId)
+    spawnTimeoutId = null
+  }
+  document.getElementById('scoreCheckTwoFailRetry').classList.remove('hidden')
+  horseJumpedCount = 0
+}
+
+function resetHorseGame() {
+  if (spawnTimeoutId !== null) {
+    clearTimeout(spawnTimeoutId);
+    spawnTimeoutId = null;
+  }
+  document.getElementById('scoreCheckTwoFailRetry').classList.add('hidden');
+  gameOver = false;
+  horseMiniGame = true;
+  spawningRock = true;
+  y = 0;
+  document.getElementById("horseJumping").style.transform = "translateY(-50%)";
+  document.getElementById("horseJumping").classList.add("hidden");
+  document.getElementById("horseRunning").classList.remove("hidden");
+  scheduleSpawn();
+}
+
+function closeCheckThreePopUp(){
+  document.getElementById('scoreCheckThreePopUp').classList.add('hidden')
+  minigameMusicStart();
+  firstQuestionPrep();
+}
+
+function firstQuestionPrep(){
+  scoreDisplay('show')
+  questionText.classList.remove('scoreFont');
+  firstQuestion();
+}
+
+function firstQuestion(){
+  question = 1;
+  questionText.textContent = "QUESTION 1: What's your favorite food?"
+  document.getElementById('questionOneA').classList.remove('hidden');
+  document.getElementById('questionOneB').classList.remove('hidden');
+}
+
+function firstQuestionA(){
+  hideFirstButtons();
+  questionText.textContent = "Everyone appreciates your taste."
+  showNext();
+}
+
+function hideFirstButtons(){
+  document.getElementById('questionOneA').classList.add('hidden');
+  document.getElementById('questionOneB').classList.add('hidden');
+}
+
+function secondQuestion(){
+  questionText.textContent = "QUESTION 2: What animal were the Comanche famous masters of riding?"
+  question = 2;
+  document.getElementById('questionTwoA').classList.remove('hidden');
+  document.getElementById('questionTwoB').classList.remove('hidden');  
+}
+
+function secondQuestionA(){
+  hideSecondButtons();
+  questionText.textContent = "Everyone respects your honesty, but you should know that it's horse by now."
+  showNext();
+}
+
+function secondQuestionB(){
+  hideSecondButtons();
+  questionText.textContent = "You would know-You tamed one, remember?"
+  showNext();
+}
+
+function hideSecondButtons(){
+  document.getElementById('questionTwoA').classList.add('hidden');
+  document.getElementById('questionTwoB').classList.add('hidden');
+}
+
+function thirdQuestion(){
+  questionText.textContent = "QUESTION 3: True or False: The Comanche were nomadic"
+  question = 3;
+  document.getElementById('questionThreeA').classList.remove('hidden');
+  document.getElementById('questionThreeB').classList.remove('hidden');
+}
+
+function thirdQuestionA(){
+  hideThirdButtons();
+  questionText.textContent = "Of course! Remember the background changing?"
+  showNext();
+}
+
+function thirdQuestionB(){
+  hideThirdButtons();
+  questionText.textContent = "You apparently forgot about the background changing."
+  showNext();
+}
+
+function hideThirdButtons(){
+  document.getElementById('questionThreeA').classList.add('hidden');
+  document.getElementById('questionThreeB').classList.add('hidden');
+}
+
+function fourthQuestion(){
+  questionText.textContent = "QUESTION 4: True or False: The Comanche roamed the Texas Coastline "
+  question = 4;
+  document.getElementById('questionFourA').classList.remove('hidden');
+  document.getElementById('questionFourB').classList.remove('hidden');
+}
+
+function fourthQuestionA(){
+  hideFourthButtons();
+  questionText.textContent = "You clearly didn't read your message of congratulations on Milestone #1. They roamed the Texas Grasslands, silly!"
+  showNext();
+}
+
+function fourthQuestionB(){
+  hideFourthButtons();
+  questionText.textContent = "Yep, we roamed the Grasslands-You sure did your reading!"
+  showNext();
+}
+
+function hideFourthButtons(){
+  document.getElementById('questionFourA').classList.add('hidden');
+  document.getElementById('questionFourB').classList.add('hidden');
+}
+
+function fifthQuestion(){
+  questionText.textContent = "QUESTION 5: True or False: You had fun and learned something today!"
+  question = 5;
+  document.getElementById('questionFiveA').classList.remove('hidden');
+  document.getElementById('questionFiveB').classList.remove('hidden');
+}
+
+function fifthQuestionA(){
+  hideFifthButtons();
+  questionText.textContent = "Glad you liked it-Thanks for playing!"
+  showNext();
+}
+
+function fifthQuestionB(){
+  hideFifthButtons();
+  questionText.textContent = "That's a shame-Thank you for playing, though!"
+  showNext();
+}
+
+function stopAllAudio() {
+  ["mainSong","cryingBabySFX","minigameMusic","yaySFX"].forEach(id => {
+    const a = document.getElementById(id);
+    if (a) { a.pause(); a.currentTime = 0; a.loop = false; }
+  });
+}
+
+function endSequence() {
+  gameOver = true;
+  spawningRock = false;
+  if (spawnTimeoutId !== null) { clearTimeout(spawnTimeoutId); spawnTimeoutId = null; }
+  document.querySelectorAll(".rock").forEach(r => r.remove());
+
+  const runEl = document.getElementById("horseRunning");
+  const jumpEl = document.getElementById("horseJumping");
+  if (runEl) runEl.classList.add("hidden");
+  if (jumpEl) jumpEl.classList.add("hidden");
+
+  const gameRoot = document.getElementById("game");
+  if (gameRoot) gameRoot.classList.add("hidden");
+
+  document.body.style.backgroundImage = "none";
+  document.body.style.background = "#000";
+  document.body.style.color = "#000";
+
+  stopAllAudio();
+  const end = document.getElementById("endSFX");
+  if (end) { end.currentTime = 0; end.loop = true; end.play(); }
+}
+
+// replace your current nextButton() with this:
+function nextButton(){
+  if (question == 1){
+    secondQuestion();
+  } else if (question == 2){
+    thirdQuestion();
+  } else if (question == 3){
+    fourthQuestion();
+  } else if (question == 4){
+    fifthQuestion();
+  } else {
+    alert('You have finished Click the Comanche! Close the tab or reload to play again, or stick around, press OK, and jam out to some tunes!');
+    endSequence();
+  }
+  document.getElementById('nextButton').classList.add('hidden');
+}
+
+function showNext(){
+  document.getElementById('nextButton').classList.remove('hidden');
+}
+
+function hideFifthButtons(){
+  document.getElementById('questionFiveA').classList.add('hidden');
+  document.getElementById('questionFiveB').classList.add('hidden');
+}
+
+function scoreCheck(){
+  if (scoreCheckVar === 50 && score >= 50){
+    const pop = document.getElementById('scoreCheckOnePopUp');
+    pop.classList.remove('hidden');
+    document.getElementById('scoreNumber').classList.add('hidden');
+    document.getElementById('comanche-baby').classList.add('hidden');
+    scoreCheckVar = 500;
+    inMinigame = true;
+    stopCrying();
+    stopMusicMain();
+  } else if (scoreCheckVar == 500 && score >= 500){
+    const pop = document.getElementById('scoreCheckTwoPopUp');
+    pop.classList.remove('hidden');
+    scoreDisplay('hide');
+    document.getElementById('comanche-boy').classList.add('hidden');
+    scoreCheckVar = 1000;
+    inMinigame = true;
+    changeBG = false;
+    document.body.style.backgroundImage = "url('horsePlains.png')";
+    stopMusicMain();
+  } else if (scoreCheckVar == 1000 && score >=1000){
+    document.getElementById('scoreCheckThreePopUp').classList.remove('hidden');
+    document.getElementById('comanche-teen').classList.add('hidden');
+    scoreCheckVar = 1000;
+    scoreDisplay('hide')
+    inMinigame = true;
+    changeBG = false;
+    document.body.style.backgroundImage = "url('OldBG.png')";
+    stopMusicMain();
+  }
+}
+
+function backgroundChanger(){
+  setInterval(function(){
+    if (changeBG){
+      if (backgroundStage == 1){
+        document.body.style.backgroundImage = "url('BG2.png')";
+        backgroundStage+=1;
+      } else if (backgroundStage == 2){
+        document.body.style.backgroundImage = "url('BG3.png')";
+        backgroundStage+=1;
+      } else if (backgroundStage == 3){
+        document.body.style.backgroundImage = "url('BG4.png')";
+        backgroundStage+=1;
+      } else if (backgroundStage == 4){
+        document.body.style.backgroundImage = "url('BG5.png')";
+        backgroundStage+=1;
+      } else if (backgroundStage == 5){
+        document.body.style.backgroundImage = "url('BG6.png')";
+        backgroundStage+=1;
+      } else if (backgroundStage == 6){
+        document.body.style.backgroundImage = "url('BG1.png')";
+        backgroundStage=1;
+      }
+    }
+  }, 15000);
+}
+</script>
+</body>
+</html>
