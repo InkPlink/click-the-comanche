@@ -72,6 +72,26 @@
 }
 #apple h1 { margin: 0; font-size: 60px; line-height: 1; }
 
+/* Replace your current .rock rules with this */
+.rock {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /* kill default h2 spacing */
+  margin: 0;
+
+  /* make the box match the emoji size */
+  width: 32px;              /* tweak if you change font-size */
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+  line-height: 1;
+  pointer-events: none;      /* keeps clicks from hitting rocks */
+}
+
 /* Background */
 body {
   background-image: url('BG1.png');
@@ -90,14 +110,6 @@ body {
   height: auto;
   user-select: none;
   pointer-events: none;
-}
-
-.rock {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 28px;
-  line-height: 1;
 }
 
 /* ---------- Question buttons (class-based) ---------- */
